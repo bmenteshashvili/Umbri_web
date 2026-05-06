@@ -194,8 +194,8 @@
 
   // ---------- Gallery carousel ----------
   var track = document.getElementById('carousel-track');
-  var prevBtn = document.querySelector('.carousel-btn--prev');
-  var nextBtn = document.querySelector('.carousel-btn--next');
+  var prevBtn = document.getElementById('gallery-prev');
+  var nextBtn = document.getElementById('gallery-next');
   var carouselPos = 0;
 
   // Handle missing images — show placeholder, hide broken img
@@ -258,6 +258,20 @@
   // Delay initial update so broken images get hidden first
   updateCarousel();
   setTimeout(updateCarousel, 500);
+
+  // Touch swipe for gallery carousel
+  var galleryWrapper = document.querySelector('.carousel-track-wrapper');
+  var galleryTouchX = 0;
+  galleryWrapper.addEventListener('touchstart', function (e) {
+    galleryTouchX = e.touches[0].clientX;
+  }, { passive: true });
+  galleryWrapper.addEventListener('touchend', function (e) {
+    var delta = e.changedTouches[0].clientX - galleryTouchX;
+    if (Math.abs(delta) > 40) {
+      if (delta < 0) { carouselPos++; } else { carouselPos--; }
+      updateCarousel();
+    }
+  }, { passive: true });
 
   // ---------- Gallery lightbox ----------
   var lightbox = document.getElementById('lightbox');
@@ -344,6 +358,20 @@
   videoNextBtn.addEventListener('click', function () { videoPos++; updateVideoCarousel(); });
   window.addEventListener('resize', updateVideoCarousel);
   updateVideoCarousel();
+
+  // Touch swipe for video carousel
+  var videoWrapper = document.querySelector('.video-track-wrapper');
+  var videoTouchX = 0;
+  videoWrapper.addEventListener('touchstart', function (e) {
+    videoTouchX = e.touches[0].clientX;
+  }, { passive: true });
+  videoWrapper.addEventListener('touchend', function (e) {
+    var delta = e.changedTouches[0].clientX - videoTouchX;
+    if (Math.abs(delta) > 40) {
+      if (delta < 0) { videoPos++; } else { videoPos--; }
+      updateVideoCarousel();
+    }
+  }, { passive: true });
 
   // ---------- Video facades (click-to-embed) ----------
   document.querySelectorAll('.video-facade').forEach(function (facade) {
