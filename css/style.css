@@ -521,7 +521,22 @@ section:nth-child(even) {
 
 @media (max-width: 768px) {
   .music-layout {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 20px;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+  }
+  .music-layout::-webkit-scrollbar {
+    display: none;
+  }
+  .music-main,
+  .music-sidebar {
+    flex: 0 0 85vw;
+    scroll-snap-align: start;
   }
 }
 
@@ -1201,6 +1216,34 @@ section:nth-child(even) {
     padding: 12px 0;
   }
 
+  /* News — horizontal scroll */
+  .news-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 20px;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+    margin-top: 40px;
+  }
+  .news-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .news-card {
+    flex: 0 0 85vw;
+    scroll-snap-align: start;
+  }
+  /* Force cards visible — IntersectionObserver doesn't fire for off-screen scroll items */
+  #news .news-card.fade-in,
+  #music .music-card.fade-in,
+  #music .spotify-actions.fade-in,
+  #music .spotify-cta.fade-in {
+    opacity: 1;
+    transform: none;
+  }
+
   /* Video */
   .video-grid {
     grid-template-columns: 1fr;
@@ -1223,9 +1266,5 @@ section:nth-child(even) {
 @media (max-width: 480px) {
   .hero-title {
     letter-spacing: 10px;
-  }
-
-  .news-grid {
-    grid-template-columns: 1fr;
   }
 }
