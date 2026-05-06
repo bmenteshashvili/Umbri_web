@@ -521,7 +521,30 @@ section:nth-child(even) {
 
 @media (max-width: 768px) {
   .music-layout {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 20px;
+    padding-bottom: 12px;
+    scrollbar-width: none;
+  }
+  .music-layout::-webkit-scrollbar {
+    display: none;
+  }
+  .music-main,
+  .music-sidebar {
+    min-width: 85vw;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+  /* Keep music cards visible — fade-in observer won't fire for off-screen items */
+  .music-card.fade-in,
+  .spotify-actions.fade-in,
+  .spotify-cta.fade-in {
+    opacity: 1;
+    transform: none;
   }
 }
 
@@ -1159,8 +1182,8 @@ section:nth-child(even) {
 
   /* Hero — less zoomed on mobile */
   #hero {
-    height: 60vh;
-    min-height: 320px;
+    height: 50vh;
+    min-height: 280px;
     background-position: top center;
   }
 
@@ -1217,9 +1240,15 @@ section:nth-child(even) {
     display: none;
   }
   .news-card {
-    min-width: min(82vw, 340px);
+    width: 82vw;
+    min-width: 82vw;
     flex-shrink: 0;
     scroll-snap-align: start;
+  }
+  /* Override fade-in for carousel cards — off-screen items never trigger the observer */
+  .news-card.fade-in {
+    opacity: 1;
+    transform: none;
   }
 
   /* Video */
