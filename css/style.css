@@ -521,30 +521,7 @@ section:nth-child(even) {
 
 @media (max-width: 768px) {
   .music-layout {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    gap: 20px;
-    padding-bottom: 12px;
-    scrollbar-width: none;
-  }
-  .music-layout::-webkit-scrollbar {
-    display: none;
-  }
-  .music-main,
-  .music-sidebar {
-    min-width: 85vw;
-    flex-shrink: 0;
-    scroll-snap-align: start;
-  }
-  /* Keep music cards visible — fade-in observer won't fire for off-screen items */
-  .music-card.fade-in,
-  .spotify-actions.fade-in,
-  .spotify-cta.fade-in {
-    opacity: 1;
-    transform: none;
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1158,45 +1135,6 @@ section:nth-child(even) {
   color: var(--text-primary);
 }
 
-/* ---------- NEWS & MUSIC MOBILE CAROUSEL WRAPPERS ---------- */
-.news-carousel-wrapper > .carousel-btn,
-.music-carousel-wrapper > .carousel-btn {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .news-carousel-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 30px;
-  }
-  .news-carousel-wrapper > .news-grid {
-    flex: 1;
-    min-width: 0;
-    margin-top: 0;
-  }
-  .news-carousel-wrapper > .carousel-btn {
-    display: flex;
-    flex-shrink: 0;
-  }
-
-  .music-carousel-wrapper {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .music-carousel-wrapper > .music-layout {
-    flex: 1;
-    min-width: 0;
-  }
-  .music-carousel-wrapper > .carousel-btn {
-    display: flex;
-    flex-shrink: 0;
-    margin-top: 16px;
-  }
-}
-
 /* ---------- SCROLL ANIMATIONS ---------- */
 .fade-in {
   opacity: 0;
@@ -1263,33 +1201,6 @@ section:nth-child(even) {
     padding: 12px 0;
   }
 
-  /* News — horizontal scroll carousel */
-  .news-grid {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    gap: 20px;
-    padding-bottom: 12px;
-    scrollbar-width: none;
-    margin-top: 40px;
-  }
-  .news-grid::-webkit-scrollbar {
-    display: none;
-  }
-  .news-card {
-    width: 82vw;
-    min-width: 82vw;
-    flex-shrink: 0;
-    scroll-snap-align: start;
-  }
-  /* Override fade-in for carousel cards — off-screen items never trigger the observer */
-  .news-card.fade-in {
-    opacity: 1;
-    transform: none;
-  }
-
   /* Video */
   .video-grid {
     grid-template-columns: 1fr;
@@ -1312,5 +1223,9 @@ section:nth-child(even) {
 @media (max-width: 480px) {
   .hero-title {
     letter-spacing: 10px;
+  }
+
+  .news-grid {
+    grid-template-columns: 1fr;
   }
 }

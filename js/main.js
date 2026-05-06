@@ -389,54 +389,6 @@
     });
   });
 
-  // ---------- News carousel arrows ----------
-  var newsGrid    = document.querySelector('.news-grid');
-  var newsPrevBtn = document.getElementById('news-prev');
-  var newsNextBtn = document.getElementById('news-next');
-
-  if (newsPrevBtn && newsNextBtn && newsGrid) {
-    function getNewsCardWidth() {
-      var card = newsGrid.querySelector('.news-card');
-      return card ? card.offsetWidth + 20 : 300;
-    }
-    function updateNewsArrows() {
-      newsPrevBtn.disabled = newsGrid.scrollLeft <= 0;
-      newsNextBtn.disabled = newsGrid.scrollLeft >= newsGrid.scrollWidth - newsGrid.clientWidth - 1;
-    }
-    newsPrevBtn.addEventListener('click', function () {
-      newsGrid.scrollBy({ left: -getNewsCardWidth(), behavior: 'smooth' });
-    });
-    newsNextBtn.addEventListener('click', function () {
-      newsGrid.scrollBy({ left: getNewsCardWidth(), behavior: 'smooth' });
-    });
-    newsGrid.addEventListener('scroll', updateNewsArrows, { passive: true });
-    updateNewsArrows();
-  }
-
-  // ---------- Music carousel arrows ----------
-  var musicLayout    = document.querySelector('.music-layout');
-  var musicPrevBtn   = document.getElementById('music-prev');
-  var musicNextBtn   = document.getElementById('music-next');
-
-  if (musicPrevBtn && musicNextBtn && musicLayout) {
-    function getMusicPanelWidth() {
-      var panel = musicLayout.querySelector('.music-main');
-      return panel ? panel.offsetWidth + 20 : 300;
-    }
-    function updateMusicArrows() {
-      musicPrevBtn.disabled = musicLayout.scrollLeft <= 0;
-      musicNextBtn.disabled = musicLayout.scrollLeft >= musicLayout.scrollWidth - musicLayout.clientWidth - 1;
-    }
-    musicPrevBtn.addEventListener('click', function () {
-      musicLayout.scrollBy({ left: -getMusicPanelWidth(), behavior: 'smooth' });
-    });
-    musicNextBtn.addEventListener('click', function () {
-      musicLayout.scrollBy({ left: getMusicPanelWidth(), behavior: 'smooth' });
-    });
-    musicLayout.addEventListener('scroll', updateMusicArrows, { passive: true });
-    updateMusicArrows();
-  }
-
   // ---------- Contact form ----------
   var form = document.getElementById('contact-form');
 
