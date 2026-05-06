@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Start-Process \"c:\\\\Users\\\\User\\\\Desktop\\\\umbri\\\\umbri web\\\\index.html\")"
+    ]
+  }
+}
