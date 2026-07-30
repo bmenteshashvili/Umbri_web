@@ -228,7 +228,7 @@ section:nth-child(even) {
   min-height: 600px;
   overflow: hidden;
   padding: 0;
-  background: url('../images/main.jpg') center/cover no-repeat;
+  background: url('../images/Sequence 01060.png') center/cover no-repeat;
   animation: heroReveal 1.6s ease-out both;
 }
 
