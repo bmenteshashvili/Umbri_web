@@ -1000,6 +1000,42 @@ section:nth-child(even) {
   color: var(--bg-darkest);
 }
 
+/* Festival show with poster */
+.show-item--festival {
+  align-items: center;
+}
+
+.show-poster {
+  width: 80px;
+  min-width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.show-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(20%);
+  transition: filter 0.3s;
+}
+
+.show-item--festival:hover .show-poster img {
+  filter: grayscale(0%);
+}
+
+@media (max-width: 768px) {
+  .show-poster {
+    width: 64px;
+    min-width: 64px;
+    height: 64px;
+  }
+}
+
 /* ---------- CONTACT ---------- */
 .contact-wrapper {
   display: grid;
