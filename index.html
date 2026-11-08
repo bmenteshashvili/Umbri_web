@@ -382,6 +382,8 @@
         <form class="contact-form" id="contact-form" autocomplete="off">
           <input type="hidden" name="_subject" value="New message from UMBRI website">
           <input type="hidden" name="_captcha" value="false">
+          <!-- Honeypot: hidden from people, spam bots fill it in and get rejected -->
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
           <div class="form-group">
             <input type="text" id="name" name="name" placeholder="Your Name" required>
           </div>

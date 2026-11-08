@@ -390,6 +390,10 @@
   });
 
   // ---------- Contact form ----------
+  // TODO: replace the email below with your FormSubmit alias
+  // (the random string FormSubmit gives you after confirming your email),
+  // so your real address is not visible in the site's code.
+  var FORM_ENDPOINT = 'https://formsubmit.co/ajax/bmenteshashvili@gmail.com';
   var form = document.getElementById('contact-form');
 
   form.addEventListener('submit', function (e) {
@@ -398,13 +402,17 @@
     btn.textContent = 'Sending…';
     btn.disabled = true;
 
-    fetch('https://formsubmit.co/ajax/bmenteshashvili@gmail.com', {
+    fetch(FORM_ENDPOINT, {
       method: 'POST',
       headers: { 'Accept': 'application/json' },
       body: new FormData(form)
     })
       .then(function (res) { return res.json(); })
-      .then(function () {
+      .then(function (data) {
+        // FormSubmit returns success: "true" (string) or true when the message went through
+        if (!data || String(data.success) !== 'true') {
+          throw new Error((data && data.message) || 'Send failed');
+        }
         btn.textContent = 'Message Sent!';
         btn.style.background = 'var(--accent)';
         btn.style.color = 'var(--bg-darkest)';
