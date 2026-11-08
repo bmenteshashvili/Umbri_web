@@ -169,7 +169,7 @@
 
   // ---------- Scroll-reveal animations ----------
   var fadeTargets = document.querySelectorAll(
-    '.news-card, .video-card, .yt-actions, .gallery-carousel, .ig-cta, .show-item, .contact-wrapper, .music-card, .spotify-actions, .spotify-cta'
+    '.video-card, .yt-actions, .gallery-carousel, .ig-cta, .show-item, .contact-wrapper, .music-card, .spotify-actions, .spotify-cta'
   );
 
   fadeTargets.forEach(function (el) {
@@ -370,6 +370,51 @@
     if (Math.abs(delta) > 40) {
       if (delta < 0) { videoPos++; } else { videoPos--; }
       updateVideoCarousel();
+    }
+  }, { passive: true });
+
+  // ---------- News carousel ----------
+  var newsTrack   = document.getElementById('news-track');
+  var newsPrevBtn = document.getElementById('news-prev');
+  var newsNextBtn = document.getElementById('news-next');
+  var newsCards   = newsTrack.querySelectorAll('.news-card');
+  var newsPos     = 0;
+
+  function getNewsStep() {
+    var gap = parseFloat(getComputedStyle(newsTrack).columnGap) || 0;
+    return newsCards.length ? newsCards[0].offsetWidth + gap : 0;
+  }
+
+  function getNewsPerView() {
+    var step = getNewsStep();
+    if (!step) return 1;
+    return Math.max(1, Math.round(newsTrack.parentElement.offsetWidth / step));
+  }
+
+  function updateNewsCarousel() {
+    var maxPos = Math.max(0, newsCards.length - getNewsPerView());
+    if (newsPos > maxPos) newsPos = maxPos;
+    if (newsPos < 0)      newsPos = 0;
+    newsTrack.style.transform = 'translateX(-' + (newsPos * getNewsStep()) + 'px)';
+    newsPrevBtn.disabled = newsPos <= 0;
+    newsNextBtn.disabled = newsPos >= maxPos;
+  }
+
+  newsPrevBtn.addEventListener('click', function () { newsPos--; updateNewsCarousel(); });
+  newsNextBtn.addEventListener('click', function () { newsPos++; updateNewsCarousel(); });
+  window.addEventListener('resize', updateNewsCarousel);
+  updateNewsCarousel();
+
+  // Touch swipe for news carousel
+  var newsTouchX = 0;
+  newsTrack.parentElement.addEventListener('touchstart', function (e) {
+    newsTouchX = e.touches[0].clientX;
+  }, { passive: true });
+  newsTrack.parentElement.addEventListener('touchend', function (e) {
+    var delta = e.changedTouches[0].clientX - newsTouchX;
+    if (Math.abs(delta) > 40) {
+      if (delta < 0) { newsPos++; } else { newsPos--; }
+      updateNewsCarousel();
     }
   }, { passive: true });
 

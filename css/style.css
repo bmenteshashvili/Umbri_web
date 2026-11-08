@@ -255,11 +255,35 @@ section:nth-child(even) {
 }
 
 /* ---------- NEWS ---------- */
-.news-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 30px;
+/* News carousel: 3 cards visible on desktop, 2 on tablet, 1 on mobile */
+.news-carousel {
+  display: flex;
+  align-items: center;
+  gap: 16px;
   margin-top: 40px;
+}
+
+.news-track-wrapper {
+  flex: 1;
+  overflow: hidden;
+  padding-top: 6px; /* room for the card hover lift */
+}
+
+.news-grid {
+  display: flex;
+  gap: 30px;
+  transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.news-grid .news-card {
+  flex: 0 0 calc((100% - 60px) / 3);
+  min-width: 0;
+}
+
+@media (max-width: 1024px) {
+  .news-grid .news-card {
+    flex-basis: calc((100% - 30px) / 2);
+  }
 }
 
 .news-card {
@@ -1252,24 +1276,17 @@ section:nth-child(even) {
     padding: 12px 0;
   }
 
-  /* News — horizontal scroll */
+  /* News — one card at a time */
+  .news-carousel {
+    gap: 10px;
+  }
   .news-grid {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
     gap: 20px;
-    padding-bottom: 8px;
-    scrollbar-width: none;
-    margin-top: 40px;
+    align-items: flex-start;
   }
-  .news-grid::-webkit-scrollbar {
-    display: none;
-  }
-  .news-card {
-    flex: 0 0 85vw;
-    scroll-snap-align: start;
+  .news-grid .news-card {
+    flex-basis: 100%;
+    padding: 28px 22px;
   }
   /* Force cards visible — IntersectionObserver doesn't fire for off-screen scroll items */
   #news .news-card.fade-in,
