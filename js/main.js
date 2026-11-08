@@ -5,11 +5,93 @@
 (function () {
   'use strict';
 
+  // ---------- Smoke ----------
+  // Slow, soft puffs drifting upward. Drawn at half resolution for speed.
+  (function () {
+    var smokeCanvas = document.getElementById('smoke-canvas');
+    if (!smokeCanvas) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var sctx = smokeCanvas.getContext('2d');
+    var SCALE = 0.5;
+    var isSmall = window.innerWidth < 768;
+    var PUFFS = isSmall ? 6 : 10;
+    var W, H;
+
+    function resizeSmoke() {
+      W = smokeCanvas.width  = Math.round(window.innerWidth  * SCALE);
+      H = smokeCanvas.height = Math.round(window.innerHeight * SCALE);
+    }
+    resizeSmoke();
+    window.addEventListener('resize', resizeSmoke);
+
+    // Build one soft, cloudy sprite and reuse it for every puff
+    var sprite = document.createElement('canvas');
+    sprite.width = sprite.height = 256;
+    var g = sprite.getContext('2d');
+    for (var k = 0; k < 14; k++) {
+      var cx = 128 + (Math.random() - 0.5) * 90;
+      var cy = 128 + (Math.random() - 0.5) * 90;
+      var r  = 40 + Math.random() * 60;
+      var grad = g.createRadialGradient(cx, cy, 0, cx, cy, r);
+      grad.addColorStop(0, 'rgba(190, 196, 204, 0.10)');
+      grad.addColorStop(1, 'rgba(190, 196, 204, 0)');
+      g.fillStyle = grad;
+      g.beginPath();
+      g.arc(cx, cy, r, 0, Math.PI * 2);
+      g.fill();
+    }
+
+    function makePuff(initial) {
+      var size = (Math.random() * 1.2 + 0.8) * Math.max(W, H) * 0.4;
+      return {
+        x: Math.random() * W,
+        y: initial ? Math.random() * H : H + size * 0.3,
+        size: size,
+        vx: (Math.random() - 0.5) * 0.12,
+        vy: -(Math.random() * 0.18 + 0.06),
+        rot: Math.random() * Math.PI * 2,
+        vr: (Math.random() - 0.5) * 0.0015,
+        life: initial ? Math.random() * 1500 : 0,
+        maxLife: Math.random() * 1500 + 1500,
+        maxAlpha: Math.random() * 0.25 + 0.15
+      };
+    }
+
+    var puffs = [];
+    for (var n = 0; n < PUFFS; n++) puffs.push(makePuff(true));
+
+    function drawSmoke() {
+      sctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < puffs.length; i++) {
+        var p = puffs[i];
+        p.life++;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vr;
+        var t = p.life / p.maxLife;
+        if (t >= 1 || p.y < -p.size) { puffs[i] = makePuff(false); continue; }
+        // fade in, hold, fade out
+        var a = t < 0.2 ? t / 0.2 : (t > 0.75 ? (1 - t) / 0.25 : 1);
+        sctx.globalAlpha = a * p.maxAlpha;
+        sctx.save();
+        sctx.translate(p.x, p.y);
+        sctx.rotate(p.rot);
+        sctx.drawImage(sprite, -p.size / 2, -p.size / 2, p.size, p.size);
+        sctx.restore();
+      }
+      sctx.globalAlpha = 1;
+      requestAnimationFrame(drawSmoke);
+    }
+    drawSmoke();
+  })();
+
   // ---------- Film scratches ----------
   var canvas = document.getElementById('dust-canvas');
   var ctx = canvas.getContext('2d');
   var scratches = [];
   var scratchCount = 12;
+  // Scratch colour comes from the theme (--scratch-rgb in style.css)
+  var scratchRGB = getComputedStyle(document.documentElement).getPropertyValue('--scratch-rgb').trim() || '30, 30, 30';
 
   function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -81,7 +163,7 @@
       ctx.beginPath();
       ctx.moveTo(0, 0);
       ctx.lineTo(0, s.length);
-      ctx.strokeStyle = 'rgba(30, 30, 30, ' + alpha + ')';
+      ctx.strokeStyle = 'rgba(' + scratchRGB + ', ' + alpha + ')';
       ctx.lineWidth = s.width;
       ctx.lineCap = 'round';
       ctx.stroke();
